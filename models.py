@@ -46,37 +46,16 @@ class Habit(db.Model):
                 tmp = 0
         return len
 
-
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     habit_id = db.Column(db.Integer, db.ForeignKey('habit.id'))
     category = db.Column(db.Integer, db.ForeignKey('category.name'))
     state = db.Column(db.Boolean)
     date = db.Column(db.Date)
-
-class Days(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    score = db.Column(db.Integer)
-    date = db.Column(db.Date)
+    value = db.Column(db.Integer)
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
     records = db.relationship('Record')
     habits = db.relationship('Habit')
-
-class RecordSchema(ma.ModelSchema):
-    class Meta:
-        model=Record
-
-class HabitSchema(ma.ModelSchema):
-    class Meta:
-        model=Habit
-
-class CategorySchema(ma.ModelSchema):
-    class Meta:
-        model=Category
-    
-    habits = ma.Nested(HabitSchema, many=True)
-    records = ma.Nested(RecordSchema, many=True)
-

@@ -15,6 +15,5 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 ma = Marshmallow(app)
 
-
 from daily_record import  models, views, commands
 

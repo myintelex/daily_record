@@ -1,3 +1,4 @@
 .vscode/*
 daily-record-venv/*
 __pycache__/*
+*.db

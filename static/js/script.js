@@ -87,9 +87,6 @@ $(document).ready(function () {
     function show_history_chart(category) {
         var myChart = echarts.init(document.getElementById('history-chart'));
         var selected = {}
-        for (var i = 0; i < category.length; i++) {
-            selected[category[i]] = false
-        }
         console.log(selected)
         myChart.setOption({
             toolbox: {

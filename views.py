@@ -3,7 +3,7 @@ from functools import reduce
 
 from daily_record import app, db
 from daily_record.forms import DelHabitForm, AddHabitForm, EditHabitForm, DelHabitForm, LoginForm
-from daily_record.models import Habit, Record, Days, Category, CategorySchema
+from daily_record.models import Habit, Record, Category 
 from daily_record.fake import fake_data
 
 import datetime
@@ -95,13 +95,7 @@ def get_history_data():
 
     def _fun_cal_value(record):
         date = record.date.strftime("%Y-%m-%d")
-        habit = Habit.query.get(record.habit_id)
-        if record.state:
-            record_data[date][record.category] = record_data[date][
-                record.category] + habit.done_value
-        else:
-            record_data[date][record.category] = record_data[date][
-                record.category] - habit.undone_value
+        record_data[date][record.category] = record_data[date][record.category] + int(record.value)
 
     records = Record.query.all()
     records = reduce(_reduce_records_date, records)
@@ -243,12 +237,12 @@ def change_habit_state(habit_id):
                     category=habit.category,
                     date=datetime.date.today(),
                     state=habit.today_state)
-    ret = Record.query.filter_by(date=datetime.date.today()).filter_by(
-        habit_id=habit_id).all()
+    if habit.today_state:
+        record.value = habit.done_value
+    else:
+        record.value = -habit.undone_value
     db.session.add(record)
     db.session.commit()
-    ret = Record.query.filter_by(date=datetime.date.today()).filter_by(
-        habit_id=habit_id).all()
     habit.refresh_done_cnt()
     db.session.commit()
 
