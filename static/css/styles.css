@@ -1,0 +1,55 @@
+body {
+    margin-bottom: 80px;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter UI", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.bg-gray {
+    background-color: #e9ecef;
+}
+
+.bg-m {
+    background-color: rgb(32, 56, 100);
+}
+
+.bg-w {
+    background-color: rgb(255, 0, 0);
+}
+
+.text-w {
+    color: rgb(255, 0, 0) !important;
+}
+
+.text-m {
+    color: rgb(32, 56, 100) !important;
+}
+
+.card-list {
+    background-color: violet;
+}
+
+.rounded-large {
+    border-radius: 7px !important;
+}
+
+li {
+    border-radius: 7px !important;
+}
+
+.nav-pills .nav-link {
+    color: rgba(33, 37, 41, 0.5);
+}
+
+.nav-pills .nav-link:hover {
+    color: rgb(32, 56, 100) !important;
+}
+
+.nav-pills .nav-link.active {
+    background-color: white;
+    color: rgb(32, 56, 100) !important;
+}
+
+.habit-item:hover {
+    cursor: pointer;
+    margin-right: auto;
+
+}

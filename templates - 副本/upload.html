@@ -1,0 +1,7 @@
+{% extends 'base.html' %} {% from 'macros.html' import form_field %} {% block content %}
+
+<form method="POST" enctype="multipart/form-data" class="">
+    <img class="mb-4" src="./Signin Template · Bootstrap_files/bootstrap-solid.svg" alt="" width="72" height="72"> {{ uploadForm.csrf_token }} {{ form_field(uploadForm.photo)}} {{ uploadForm.submit }}
+</form>
+
+{% endblock %}
