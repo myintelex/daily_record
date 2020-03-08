@@ -1,0 +1,5 @@
+{% from 'macros.html' import form_field %} {% from 'bootstrap/form.html' import render_form %}
+
+<form method="POST" action="{{ url_for('post_edit_habit', habit_id=id) }}">
+    {{ render_form(form) }}
+</form>

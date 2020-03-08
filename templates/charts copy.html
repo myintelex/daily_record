@@ -1,0 +1,212 @@
+<div class="">
+    <h3>Charts </h3>
+</div>
+<div class="card bg-light mb-3 border-0 rounded-lg">
+    <div class="card-body pt-0">
+        <div class="pl-4 pt-2 pr-4">
+            <h5> 折线图 </h5>
+        </div>
+        <div class="card mb-2 border-0 rounded-lg">
+            <div class="card-body">
+                <div id="chart1" style="width: 100%;height:400px;"></div>
+            </div>
+        </div>
+        <div class="pl-4 pt-2 pr-4">
+            <h5> 日历视图 </h5>
+        </div>
+        <div class="card mb-2 border-0 rounded-lg">
+            <div class="card-body">
+                <div id="chart2" style="width: 100%;height:400px;"></div>
+            </div>
+        </div>
+        <div class="pl-4 pt-2 pr-4">
+            <h5> 日历视图 </h5>
+        </div>
+        <div class="card mb-2 border-0 rounded-lg">
+            <div class="card-body">
+                <div id="chart3" style="width: 100%;height:400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('chart1'));
+    var data = {
+        date: [],
+        score: [],
+        total: []
+    }
+    var tmp = 0;
+    '{% for day_data in days %}'
+    data.date.push('{{day_data.date}}')
+    data.score.push('{{day_data.score}}')
+    tmp += Number('{{day_data.score}}')
+    data.total.push(tmp)
+    '{% endfor %}'
+
+    var emphasisStyle = {
+        itemStyle: {
+            barBorderWidth: 1,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0,0,0,0.5)'
+        }
+    };
+
+    var option = {
+        xAxis: {
+            type: 'category',
+            data: data.date
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: data.score,
+            smooth: true,
+            type: 'line',
+            markPoint: {
+                data: [{
+                    type: 'max',
+                    name: '最大值'
+                }, {
+                    type: 'min',
+                    name: '最小值'
+                }]
+            },
+        }, {
+            name: 'bar',
+            type: 'bar',
+            stack: 'one',
+            emphasis: emphasisStyle,
+            data: data.score,
+        }, {
+            name: 'bar2',
+            type: 'bar',
+            stack: 'one',
+            emphasis: emphasisStyle,
+            data: data.score,
+        }, ]
+    };
+
+    myChart.setOption(option);
+
+
+    var myChart = echarts.init(document.getElementById('chart2'));
+    var data1 = [];
+
+    function category(cate) {
+        this.cate = cate
+    }
+
+    function habit(hab) {
+        this.hab = hab
+    }
+
+    var habits = []
+    '{% for day_data in days %}'
+    data1.push([echarts.format.formatTime('yyyy-MM-dd', '{{day_data.date}}'), Number('{{day_data.score}}')])
+    '{% endfor %}'
+
+
+
+    console.log(data.date)
+    console.log(data1)
+    option = {
+        title: {
+            top: 30,
+            left: 'center',
+            text: '2016年某人每天的步数'
+        },
+        tooltip: {},
+        visualMap: {
+            inRange: {
+                color: ['#2D5F73', '#538EA6', '#F2D1B3', '#F2B8A2', '#F28C8C'],
+                symbolSize: [30, 100]
+            },
+            min: -200,
+            max: 800,
+            type: 'piecewise',
+            orient: 'horizontal',
+            left: 'center',
+            top: 65,
+            textStyle: {
+                color: '#000'
+            }
+        },
+        calendar: {
+            top: 120,
+            left: 30,
+            right: 30,
+            cellSize: ['auto', 'auto'],
+            range: '2020',
+            // itemStyle: {
+            //     borderWidth: 0.5
+            // },
+            yearLabel: {
+                show: false
+            }
+        },
+        series: {
+            type: 'heatmap',
+            // symbolSize: function(val) {
+            //     return (val[1] + 100) / 20;
+            // },
+            coordinateSystem: 'calendar',
+            data: data1
+        }
+    };
+    myChart.setOption(option);
+
+
+    var myChart = echarts.init(document.getElementById('chart3'));
+    var data1 = [];
+    '{% for day_data in days %}'
+    data1.push([echarts.format.formatTime('yyyy-MM-dd', '{{day_data.date}}'), Number('{{day_data.score}}')])
+    '{% endfor %}'
+
+    var category_data = []
+    '{% for category_data in category_datas %}'
+    var habits_data = []
+    '{% for habit in category_data.habits%}'
+    habits_data.push({
+        value: Number('{{habit.value}}'),
+        name: '{{habit.name}}'
+    })
+
+    '{% endfor %}'
+    category_data.push({
+        value: Number('{{category_data.value}}'),
+        name: '{{category_data.name}}',
+        children: habits_data
+    })
+    '{% endfor %}'
+
+
+
+    console.log('----------------------------')
+
+    console.log(habits_data)
+    console.log('----------------------------')
+    option = {
+        // backgroundColor: bgColor,
+        // color: colors,
+        series: [{
+            name: '半径模式',
+            type: 'pie',
+            radius: [20, 110],
+            center: ['55%', '50%'],
+            roseType: 'radius',
+            label: {},
+            emphasis: {
+                label: {
+                    show: true
+                }
+            },
+            data: category_data
+
+        }]
+    };
+    myChart.setOption(option);
+</script>
