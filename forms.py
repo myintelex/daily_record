@@ -37,7 +37,7 @@ class AddHabitForm(FlaskForm):
         choice.append((cat, cat))
 
 
-    category = SelectField('Category', choices=choice)
+    category_name = SelectField('Category', choices=choice)
     # category = SelectField(u'Programming Language', choices=[('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')])
     done_value = IntegerField('Score When Done', validators=[NumberRange(0, 100)])
     undone_value = IntegerField('Score without Done', validators=[NumberRange(0, 100)])

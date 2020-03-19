@@ -1,15 +1,26 @@
 import os
 import sys
 
-from daily_record import app
+basedir = os.path.abspath(os.path.dirname(__file__))
+class BaseConfig:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'a secret string')
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        'DATABASE_URL', 'sqlite:///' + os.path.join(basedir, 'data.db'))
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-WIN = sys.platform.startswith('win')
-if WIN:
-    prefix = 'sqlite:///'
-else:
-    prefix = 'sqlite:////'
+class DevelopmentConfig(BaseConfig):
+    pass
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'secret_string')
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', prefix + os.path.join(app.root_path, 'data.db'))
-UPLOAD_PATH = os.path.join(app.root_path, 'uploads')
+class ProductionConfig(BaseConfig):
+    pass
+
+class TestingConfig(BaseConfig):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///'
+    WTF_CSRF_ENABLED = False
+
+config = {
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
+    'testing': TestingConfig
+}

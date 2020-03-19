@@ -1,9 +1,10 @@
 from flask import Flask, render_template, url_for, flash, redirect, json, jsonify, abort, request
 from functools import reduce
+from sqlalchemy.sql import func
 
 from daily_record import app, db
 from daily_record.forms import DelHabitForm, AddHabitForm, EditHabitForm, DelHabitForm, LoginForm
-from daily_record.models import Habit, Record, Category 
+from daily_record.models import Habit, Record, Category
 from daily_record.fake import fake_data
 
 import datetime
@@ -16,14 +17,72 @@ def done_cnt(habits):
 
 @app.template_filter()
 def prev_7_record(habits):
+    today = datetime.date.today()
+    sign_list = ['-','M','T','W','T','F','S','S']
+    def get_day_state(x):
+        state = {'state': False, 'days': sign_list[(today -datetime.timedelta(days=x)).isoweekday()]}
+        ret = list(filter(lambda r: r.date == today -datetime.timedelta(days=x), habits.records))
+        if ret and ret[0].state:
+            state['state'] = True
+        return state
+
+    re = list(map(get_day_state, range(0,7)))
     prev_7_date = datetime.date.today() - datetime.timedelta(days=7)
-    return list(
-        filter(lambda record: record.date > prev_7_date, habits.records))
+    return re
 
 
 @app.route('/', methods=['POST', 'GET'])
 def root():
+    habits = Habit.query.all()
+    for habit in habits:
+        habit.
     return render_template('base.html')
+
+
+@app.route('/get_total_score', methods=['GET'])
+def get_total_score():
+    score = Record.query.with_entities(func.sum(Record.value)).all()
+    return jsonify(score)
+
+
+@app.route('/get_month_score', methods=['GET'])
+def get_month_score():
+    today = datetime.date.today()
+    filters = {
+        Record.date > datetime.date(today.year, today.month, 1) - datetime.timedelta(1)
+    }
+    score = Record.query.filter(*filters).with_entities(func.sum(
+        Record.value)).all()
+    return jsonify(score)
+
+@app.route('/get_prev_month_score', methods=['GET'])
+def get_prev_month_score():
+    today = datetime.date.today()
+    prev_m_last_day = datetime.date(today.year, today.month, 1) - datetime.timedelta(1)
+    filters = {
+        Record.date <= prev_m_last_day,
+        Record.date >= datetime.date(prev_m_last_day.year, prev_m_last_day.month, 1)
+    }
+    score = Record.query.filter(*filters).with_entities(func.sum(
+        Record.value)).all()
+    return jsonify(score)
+
+@app.route('/photos', methods=['POST', 'GET'])
+def photos():
+    return render_template('photos.html')
+
+
+@app.route('/blog', methods=['POST', 'GET'])
+def blog():
+    return render_template('blog.html')
+
+
+@app.route('/show_habit_list', methods=['GET'])
+def show_habit_list():
+    categorys = Category.query.all()
+    return render_template('habit_list.html',
+                           categorys=categorys,
+                           datetime=datetime)
 
 
 @app.route('/habit_list', methods=['GET'])
@@ -35,6 +94,7 @@ def habit_list():
         habit.today_state = Record.query.filter_by(
             date=datetime.date.today()).filter_by(
                 habit_id=habit.id).first().state
+        habit.refresh_done_cnt()
         db.session.commit()
     categorys = Category.query.all()
     records = Record.query.all()
@@ -46,6 +106,11 @@ def habit_list():
                    record=record)
 
 
+@app.route('/setting', methods=['GET'])
+def setting():
+    return jsonify(html=render_template('setting.html'))
+
+
 def add_undone_record(habit, day):
     records = Record.query.filter_by(date=day).filter_by(
         habit_id=habit.id).all()
@@ -54,7 +119,8 @@ def add_undone_record(habit, day):
     record = Record(habit_id=habit.id,
                     category=habit.category,
                     state=False,
-                    date=day)
+                    date=day,
+                    value=-habit.undone_value)
     db.session.add(record)
     db.session.commit()
     oneday = datetime.timedelta(days=1)
@@ -95,7 +161,8 @@ def get_history_data():
 
     def _fun_cal_value(record):
         date = record.date.strftime("%Y-%m-%d")
-        record_data[date][record.category] = record_data[date][record.category] + int(record.value)
+        record_data[date][record.category] = record_data[date][
+            record.category] + int(record.value)
 
     records = Record.query.all()
     records = reduce(_reduce_records_date, records)
@@ -125,40 +192,17 @@ def get_category_data():
     categorys = Category.query.all()
     result = []
     for category in categorys:
-        category_data = {'name': category.name, 'value': 0, 'habits':[]}
+        category_data = {'name': category.name, 'value': 0, 'habits': []}
         for habit in category.habits:
             habit_data = {'name': habit.name, 'value': 0}
             for record in habit.records:
                 if record.state:
                     habit_data['value'] = habit_data['value'] + 1
             category_data['habits'].append(habit_data)
-            category_data['value'] = category_data['value'] + habit_data['value']
+            category_data[
+                'value'] = category_data['value'] + habit_data['value']
         result.append(category_data)
     return jsonify(result)
-
-    # def fun1(habit):
-    #     value = 0
-    #     def cal_habit_value(x, y):
-    #         if y.state:
-    #             value = value + habit.done_value
-    #         else:
-    #             value = value - habit.undone_value
-    #         return value
-
-    #     value = 0
-    #     return {'name': habit.name, 'value':1 }
-
-    # def func(category):
-    #     tmp = {'name': category.name}
-    #     habits = category.habits
-    #     tmp['habits'] = list(map(fun1, habits))
-    #     print(tmp['habits'])
-    #     value = 0
-    #     tmp['value'] = reduce(lambda x, y: value + y.value, tmp['habits'])
-    #     return tmp
-
-    # category_data = list(map(func, categorys))
-    # return jsonify(category_data)
 
 
 @app.route('/new_habit', methods=['GET', 'POST'])

@@ -1,9 +1,13 @@
-<div class="">
+{% block styles %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/habit_list.js')}}"></script>
+{% endblock styles %}
+<div class=" d-flex justify-content-between ">
     <h3>
         Habits
-        <button class="btn rounded-circle bg-light" id="add-new-habit-btn" onclick="show_new_habit_modal()">
+        <button class="btn rounded-circle bg-light" id="add-new-habit-btn" onclick="habitList.showNewHabitForm()">
             <i class="fa fa-plus"></i>
         </button>
+
     </h3>
 </div>
 {% for category in categorys%}
@@ -13,65 +17,13 @@
             <h5>{{category.name}}</h5>
             <div class="pr-1">
                 <i class="fa fa-check-square-o"></i>
-                <small>{{ category.habits | done_cnt | length }}/{{category.habits | length}}</small>
+                <small id="{{category.name}}_done_cnt">{{ category.done_cnt() }}/{{category.habits | length}}</small>
             </div>
         </div>
     </div>
     <div class="card-body pt-0">
         {% for habit in category.habits %}
-        <div class="card mb-2 border-0 rounded-large">
-            <div class="progress bg-transparent  rounded-top " style="height: 5px;">
-                {% set progress = habit.done_on_month * 100 / 31 %} {% set progress_bg = "bg-danger" %}
-                {% if progress>50 %} {% set progress_bg='bg-primary' %}
-                {% endif %} {% if progress>80 %} {% set progress_bg='bg-success' %} {% endif %}
-                <div class="progress-bar rounded-top {{progress_bg}}  progress-bar-striped progress-bar-animated"
-                    role="progressbar" style="width: {{progress}}%;" aria-valuenow="25" aria-valuemin="0"
-                    aria-valuemax="100">
-                </div>
-            </div>
-            <div class="card-body d-flex justify-content-between pt-1 pb-1">
-                <div class=" " style="transform: rotate(0);">
-
-                    {% set line = "none" %} {% set color = "black" %}{% if habit.today_state %}
-                    {% set line='line-through' %}
-                    {% set color='gray' %} {% endif %}
-
-                    <h6 data-filter-by="text" class="stretched-link habit-item"
-                        style="text-decoration:{{line}}; color:{{color}};" hab_id="{{habit.id}}">
-                        {{ habit.name }}
-                    </h6>
-                    <small>
-                        <span class="text-small">Total: </span>
-                        <span class="text-info">{{habit.total_done}}</span>
-                        <span class="text-small">Continue: </span>
-                        <span class="text-info">{{habit.continue_done}}</span>
-                    </small>
-                </div>
-                <div class="d-flex  align-items-center" style="">
-                    <div>
-                        {% for record in (habit|prev_7_record) %}
-                        {% if record.state %}
-                        <i class="fa fa-star text-w"></i>
-                        {% else %}
-                        <i class="fa fa-circle text-success"></i>
-                        {% endif %}
-                        {% endfor%}
-
-                    </div>
-                    <div>
-                        <a class="ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                            style="margin-right: 0;">
-                            <i class="fa fa-ellipsis-v"></i>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" onclick="show_edit_habit_modal('{{habit.id}}')"> Edit</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" onclick="del_habit('{{habit.id}}')"> Delete</a>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% include 'habit_item.html' %}
         {% endfor %}
     </div>
 </div>

@@ -3,7 +3,7 @@ import datetime
 
 from faker import Faker
 
-from daily_record import db
+from daily_record.extensions import db
 from daily_record.models import Habit, Record, Category
 
 fake = Faker()
@@ -26,7 +26,7 @@ def fake_data():
         db.session.commit()
         for i in range(random.randint(3, 7)):
             habit = Habit(name=fake.sentence(),
-                          category=cate,
+                          category_name=cate,
                           today_state= False,
                           done_value=random.randrange(10, 100, 10),
                           undone_value=random.randrange(0, 50, 10),
@@ -45,7 +45,7 @@ def fake_data():
         score = 0
         for hab in habits:
             record = Record(habit_id=hab.id,
-                            category=hab.category,
+                            category_name=hab.category_name,
                             state=random.getrandbits(1),
                             date=fake_date)
             if record.state:
@@ -54,6 +54,6 @@ def fake_data():
                 record.value = -hab.undone_value
 
             db.session.add(record)
-        db.session.commit()
         print("%s : add over " % (fake_date.strftime('%Y-%m-%d') ))
+    db.session.commit()
 

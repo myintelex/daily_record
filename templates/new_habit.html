@@ -1,5 +1,5 @@
 {% from 'macros.html' import form_field %} {% from 'bootstrap/form.html' import render_form %}
 
-<form method="POST" action="{{ url_for('new_habit') }}">
+<form method="POST" action="{{ url_for('habit.new_habit') }}">
     {{ render_form(form) }}
 </form>

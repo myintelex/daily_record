@@ -7,22 +7,22 @@
 
     <title>{% block title %}DailyRecord - Myintelex{% endblock %}</title>
     <!-- <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"> -->
-    {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css' ) }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css' ) }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css' ) }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/toastr.min.css' ) }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico' ) }}">
-    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
 
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js')}}"></script> -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/echarts.min.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/script.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/toastr.min.js')}}"></script>
-
-
-    {% endblock styles %} {% endblock head %}
+    {% block styles %} {% endblock styles %} {% endblock head %}
 </head>
 
 <body>
@@ -42,10 +42,10 @@
                         <a class="nav-link disabled" href="#"> Diary </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#"> Photos </a>
+                        <a class="nav-link " href=""> Photos </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#"> Blog </a>
+                        <a class="nav-link " href=""> Blog </a>
                     </li>
                 </ul>
                 <div>
@@ -60,18 +60,26 @@
     <div class="container">
         {% block body%}
         <main class="container">
+            <div style="width: 100%;">
+                <h2>Daily Record</h2>
+                <p class="lead">
+                    This month total get <em class="font-weight-bolder text-primary" id="month-score">123</em>,
+                    the prev month got <em class="font-weight-bolder text-primary" id="prev-month-score">500</em>
+                </p>
+                <div id="calendar-chart" style="width: 100%;height:0px;"></div>
+            </div>
             <div class="card rounded-large border-0 mb-5 bg-gray ">
-                <ul class="nav nav-pills nav-justified m-2" role="tablist">
+                <ul class="nav nav-pills nav-justified m-2">
                     <li class="nav-item">
-                        <a class="nav-link rounded-large active" href="" data-toggle="tab" id='btn-habit-list'> List</a>
+                        <a class="nav-link rounded-large active" href="#habit-list" data-toggle="tab"
+                            id="btn-habit-list"> List</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link rounded-large " href=""   url="{{ url_for( 'charts') }} " data-toggle="tab"
-                            id='btn-charts'  "> Charts </a>
+                        <a class="nav-link rounded-large " href="" data-toggle="tab" id='btn-habit-charts' "> Charts </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link rounded-large " href=""  url="{{ url_for( 'charts') }} " data-toggle="tab"
-                            onclick="item_click(this) "> Setting </a>
+                    <li class=" nav-item">
+                            <a class="nav-link rounded-large " href="" url="" data-toggle="tab"
+                                onclick="item_click(this) "> Setting </a>
                     </li>
                 </ul>
 
@@ -86,7 +94,8 @@
             {% endfor %}
             <footer class="text-center ">
                 {% block footer %}
-                <small> &copy; 2020 <a href="http://myintelex.github.io " title="Written by Myintelex">Myintelex</a> /
+                <small> &copy; 2020 <a href="http://myintelex.github.io " title="Written by Myintelex">Myintelex</a>
+                    /
                     <a href="https://github.com/myintelex/daily_record" title="Fork me on GitHub ">GitHub</a> /
                 </small>
                 <p><a id="bottom " href="# " title="Go Top ">&uarr;</a></p>
@@ -97,19 +106,32 @@
     </div>
 
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel"></h5>
+                    <h5 class="modal-title" id="myFormModalLabel"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id='myModalBody'>
+                <div class="modal-body" id='myFormModalBody'>
                     ...
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="loadingModal" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    loading...
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
+</html>

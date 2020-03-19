@@ -1,0 +1,5 @@
+{% from 'macros.html' import form_field %} {% from 'bootstrap/form.html' import render_form %}
+<h4>Do you want to delete the habit "{{habit_name}}"</h4>
+<form method="POST" action="{{ url_for('habit.del_habit', habit_id=id) }}">
+    {{ render_form(form) }}
+</form>

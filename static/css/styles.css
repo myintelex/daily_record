@@ -31,6 +31,18 @@ body {
     border-radius: 7px !important;
 }
 
+.progress {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 0px;
+}
+
+.progress-bar {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 0px;
+}
+
 li {
     border-radius: 7px !important;
 }
@@ -51,5 +63,4 @@ li {
 .habit-item:hover {
     cursor: pointer;
     margin-right: auto;
-
 }
