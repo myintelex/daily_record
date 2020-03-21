@@ -4,7 +4,7 @@
 <head>
     {% block head %} {% block metas %}
     <meta charset="utf-8"> {% endblock metas %}
-
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <title>{% block title %}DailyRecord - Myintelex{% endblock %}</title>
     <!-- <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"> -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css' ) }}">
@@ -26,83 +26,86 @@
 </head>
 
 <body>
-    <header class="mb-3">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#"> <img src="/static/logo.png" width="36" height="36" alt=""> </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
-                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/"> Habit <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#"> Diary </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href=""> Photos </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href=""> Blog </a>
-                    </li>
-                </ul>
-                <div>
-                    <a class="btn btn-sm btn-outline-secondary" id="nav-score" onclick=" $('#btn-charts').click()"> </a>
-                    <a class="btn btn-sm btn-outline-secondary"><i class="fa fa-bell-o"></i> </a>
-                    <a class="btn btn-sm btn-outline-secondary"><i class="fa fa-sliders"></i> </a>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <div class="layout layout-nav-side">
 
-    <div class="container">
-        {% block body%}
-        <main class="container">
-            <div style="width: 100%;">
-                <h2>Daily Record</h2>
-                <p class="lead">
-                    This month total get <em class="font-weight-bolder text-primary" id="month-score">123</em>,
-                    the prev month got <em class="font-weight-bolder text-primary" id="prev-month-score">500</em>
-                </p>
-                <div id="calendar-chart" style="width: 100%;height:0px;"></div>
-            </div>
-            <div class="card rounded-large border-0 mb-5 bg-gray ">
-                <ul class="nav nav-pills nav-justified m-2">
-                    <li class="nav-item">
-                        <a class="nav-link rounded-large active" href="#habit-list" data-toggle="tab"
-                            id="btn-habit-list"> List</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link rounded-large " href="" data-toggle="tab" id='btn-habit-charts' "> Charts </a>
+        <header class="mb-3">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#"> <img src="/static/logo.png" width="36" height="36" alt=""> </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+                    aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/"> Habit <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#"> Diary </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href=""> Photos </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href=""> Blog </a>
+                        </li>
+                    </ul>
+                    <div>
+                        <a class="btn btn-sm btn-outline-secondary" id="nav-score" onclick=" $('#btn-charts').click()">
+                        </a>
+                        <a class="btn btn-sm btn-outline-secondary"><i class="fa fa-bell-o"></i> </a>
+                        <a class="btn btn-sm btn-outline-secondary"><i class="fa fa-sliders"></i> </a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container">
+            {% block body%}
+            <main class="container">
+                <div style="width: 100%;">
+                    <h2>Daily Record</h2>
+                    <p class="lead">
+                        This month total get <em class="font-weight-bolder text-primary" id="month-score">123</em>,
+                        the prev month got <em class="font-weight-bolder text-primary" id="prev-month-score">500</em>
+                    </p>
+                    <div id="calendar-chart" style="width: 100%;height:0px;"></div>
+                </div>
+                <div class="card rounded-large border-0 mb-5 bg-gray ">
+                    <ul class="nav nav-pills nav-justified m-2">
+                        <li class="nav-item">
+                            <a class="nav-link rounded-large active" href="#habit-list" data-toggle="tab"
+                                id="btn-habit-list"> List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-large " href="" data-toggle="tab" id='btn-habit-charts' "> Charts </a>
                     </li>
                     <li class=" nav-item">
-                            <a class="nav-link rounded-large " href="" url="" data-toggle="tab"
-                                onclick="item_click(this) "> Setting </a>
-                    </li>
-                </ul>
+                                <a class="nav-link rounded-large " href="" url="" data-toggle="tab"
+                                    onclick="item_click(this) "> Setting </a>
+                        </li>
+                    </ul>
 
-            </div>
+                </div>
 
-            <div id='main_content'>
-                {% block content %}{% endblock %}
-            </div>
-            {% for message in get_flashed_messages() %}
-            <div class="alert alert-info ">
-                <button type="button " class="close " data-dismiss="alert ">&times;</button> {{ message }}
-            </div>
-            {% endfor %}
-            <footer class="text-center ">
-                {% block footer %}
-                <small> &copy; 2020 <a href="http://myintelex.github.io " title="Written by Myintelex">Myintelex</a>
-                    /
-                    <a href="https://github.com/myintelex/daily_record" title="Fork me on GitHub ">GitHub</a> /
-                </small>
-                <p><a id="bottom " href="# " title="Go Top ">&uarr;</a></p>
-                {% endblock %}
-            </footer>
-            <!-- <div class="circle">
+                <div id='main_content'>
+                    {% block content %}{% endblock %}
+                </div>
+                {% for message in get_flashed_messages() %}
+                <div class="alert alert-info ">
+                    <button type="button " class="close " data-dismiss="alert ">&times;</button> {{ message }}
+                </div>
+                {% endfor %}
+                <footer class="text-center ">
+                    {% block footer %}
+                    <small> &copy; 2020 <a href="http://myintelex.github.io " title="Written by Myintelex">Myintelex</a>
+                        /
+                        <a href="https://github.com/myintelex/daily_record" title="Fork me on GitHub ">GitHub</a> /
+                    </small>
+                    <p><a id="bottom " href="# " title="Go Top ">&uarr;</a></p>
+                    {% endblock %}
+                </footer>
+                <!-- <div class="circle">
                 <div class="pie_left">
                     <div class="left"></div>
                 </div>
@@ -111,37 +114,39 @@
                 </div>
                 <div class="mask"><span>30</span>%</div>
             </div> -->
-        </main>
-        {% endblock %}
-    </div>
+            </main>
+            {% endblock %}
+        </div>
 
 
-    <div class="modal fade" id="myFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myFormModalLabel"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id='myFormModalBody'>
-                    ...
+        <div class="modal fade" id="myFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myFormModalLabel"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id='myFormModalBody'>
+                        ...
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="loadingModal" data-backdrop="static" tabindex="-1" role="dialog"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    loading...
+        <div class="modal fade" id="loadingModal" data-backdrop="static" tabindex="-1" role="dialog"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        loading...
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 
