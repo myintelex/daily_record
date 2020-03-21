@@ -11,6 +11,7 @@
     </h3>
 </div>
 {% for category in categorys%}
+{% if category.habits | length > 0 %}
 <div class="card mb-3 border-0 rounded-large bg-gray">
     <div class="pl-4 pt-2 pr-4">
         <div class="d-flex justify-content-between">
@@ -27,4 +28,5 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
 {% endfor %}
