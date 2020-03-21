@@ -59,14 +59,14 @@ def show_habit_list():
 
 @index_bp.route('/show_habit_charts', methods=['GET'])
 def show_habit_charts():
-    categorys = Category.query.all()
-    for category in categorys:
-        print(category.name)
-    categorys = list(map(lambda x: str(x.name), categorys))
-    return render_template('habit_charts.html', categorys=categorys)
+    return render_template('habit_charts.html')
 
 
 @index_bp.route('/get_categorys_name', methods=['GET'])
 def get_categorys_name():
     categorys = Category.query.all()
     return jsonify([x.name for x in categorys])
+
+@index_bp.route('/get_done_on_total_today', methods=['GET'])
+def get_done_on_total_today():
+    return jsonify(done=Habit.query.filter_by(today_state=True).count(), total=Habit.query.count())

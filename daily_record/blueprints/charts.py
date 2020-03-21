@@ -51,5 +51,4 @@ def get_category_data():
             category_data[
                 'value'] = category_data['value'] + habit_data['value']
         result.append(category_data)
-    print(result)
     return jsonify(result)

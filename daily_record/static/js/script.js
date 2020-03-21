@@ -4,14 +4,24 @@ $(document).ready(function () {
     $('#prev-month-score').html('<i class="fa fa-ellipsis-h "></i>')
 
     DailyRecordApp.refreshScore()
-    // DailyRecordApp.showHabitList()
-    DailyRecordApp.showHabitCharts()
+    DailyRecordApp.showHabitList()
+    // DailyRecordApp.showHabitCharts()
     $(document).on('click', '#btn-habit-list', function () {
         DailyRecordApp.showHabitList()
     })
     $(document).on('click', '#btn-habit-charts', function () {
         DailyRecordApp.showHabitCharts()
     })
+    $('.circle').each(function (index, el) {
+        var num = $(this).find('span').text() * 3.6;
+        if (num <= 180) {
+            $(this).find('.right').css('transform', "rotate(" + num + "deg)");
+        } else {
+            $(this).find('.right').css('transform', "rotate(180deg)");
+            $(this).find('.left').css('transform', "rotate(" + (num - 180) + "deg)");
+        };
+    });
+
 });
 
 var DailyRecordApp = {
@@ -46,9 +56,10 @@ var DailyRecordApp = {
         this.total_score()
         this.this_month_score()
         this.prev_month_score()
+        DailyRecordApp.updateTitle()
     },
     showHabitList: function () {
-        $('#loadingModal').modal('show')
+        // $('#loadingModal').modal('show')
         $.ajax({
             url: '/show_habit_list',
             type: 'GET',
@@ -78,7 +89,15 @@ var DailyRecordApp = {
                 $('#myFormModal').modal('show')
             }
         })
+    },
+    updateTitle: () => {
+        $.get('/get_done_on_total_today', (data) => {
+            document.title = '(' + data.done + '/' + data.total + ') ' + document.title;
+
+        })
+
     }
+
 }
 
 Date.prototype.Format = function (fmt) { //author: meizz   

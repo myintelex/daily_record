@@ -1,3 +1,3 @@
 FLASK_ENV=development
-FLASK_APP='__init__.py'
+FLASK_APP='daily_record'
 SQLALCHEMY_TRACK_MODIFICATIONS = True

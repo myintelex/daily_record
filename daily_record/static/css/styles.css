@@ -64,3 +64,44 @@ li {
     cursor: pointer;
     margin-right: auto;
 }
+.circle {
+    width: 40px;
+    height: 40px;  
+    position: absolute;
+    border-radius: 50%;
+    background: red;
+}
+.pie_left, .pie_right {
+    width: 40px; 
+    height: 40px;
+    position: absolute;
+    top: 0;left: 0;
+}
+.left, .right {
+    display: block;
+    width:40px; 
+    height:40px;
+    background:#ccc;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.pie_right, .right {
+    clip:rect(0,auto,auto,20px);
+}
+.pie_left, .left {
+    clip:rect(0,20px,auto,0);
+}
+.mask {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    left: 5px;
+    top: 5px;
+    background: #FFF;
+    position: absolute;
+    text-align: center;
+    line-height: 30px;
+    font-size: 12px;
+}

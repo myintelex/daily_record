@@ -46,7 +46,9 @@ var habitcharts = {
                 start: 90,
                 end: 100
             }],
-            legend: {},
+            legend: {
+                selector: ['all', 'inverse']
+            },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -76,7 +78,10 @@ var habitcharts = {
                 }
             },
             xAxis: {
-                type: 'category'
+                type: 'category',
+                splitLine: {
+                    show: true,
+                },
             },
             yAxis: {},
             series: series,

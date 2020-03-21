@@ -71,7 +71,6 @@ def edit_habit(habit_id):
     form = EditHabitForm()
     habit = Habit.query.get(habit_id)
     if form.validate_on_submit():
-        print(form.category_name.data)
         habit.name = form.name.data
         habit.category_name = form.category_name.data
         habit.done_value = form.done_value.data

@@ -15,13 +15,14 @@ from daily_record.blueprints.charts import charts_bp
 from daily_record.setting import config
 from daily_record.extensions import db, bootstrap
 from daily_record.fake import fake_data
+from daily_record.models import Category
 
 def create_app(config_name=None):
 
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
 
-    app = Flask('Daily_Record')
+    app = Flask('daily_record')
     app.config.from_object(config[config_name])
 
     register_extensions(app)
@@ -52,6 +53,16 @@ def register_commands(app):
             click.echo('Drop tables.')
         db.create_all()
         click.echo('Initialized database.')
+        categorys = [
+            'Career', 'Finance', 'Social', 'Family', 'Health', 'Growth', 'Funny',
+            'Study'
+        ]
+        for cate in categorys:
+            category = Category(name=cate)
+            db.session.add(category)
+        db.session.commit()
+        click.echo('Initialized the categorys.')
+
     @app.cli.command()
     def fake():
         fake_data()
