@@ -48,7 +48,7 @@ var DailyRecordApp = {
             url: '/get_prev_month_score',
             type: 'GET',
             success: function (data) {
-                $('#prev-month-score').html(data)
+                    $('#prev-month-score').html(data)
             },
         });
     },

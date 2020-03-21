@@ -20,7 +20,7 @@ def root():
 @index_bp.route('/get_total_score', methods=['GET'])
 def get_total_score():
     score = Record.query.with_entities(func.sum(Record.value)).all()
-    return jsonify(score)
+    return jsonify(score[0][0])
 
 
 @index_bp.route('/get_month_score', methods=['GET'])
@@ -32,7 +32,7 @@ def get_month_score():
     }
     score = Record.query.filter(*filters).with_entities(func.sum(
         Record.value)).all()
-    return jsonify(score)
+    return jsonify(score[0][0])
 
 
 @index_bp.route('/get_prev_month_score', methods=['GET'])
@@ -46,6 +46,9 @@ def get_prev_month_score():
     }
     score = Record.query.filter(*filters).with_entities(func.sum(
         Record.value)).all()
+    score = score[0][0]
+    if not score:
+        score = 0
     return jsonify(score)
 
 
