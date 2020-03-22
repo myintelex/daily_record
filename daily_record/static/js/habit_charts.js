@@ -47,7 +47,13 @@ var habitcharts = {
                 end: 100
             }],
             legend: {
-                selector: ['all', 'inverse']
+                right: 50,
+                type: 'scroll',
+                selector: [{
+                    type: 'all or inverse',
+                    // 可以是任意你喜欢的 title
+                    title: 'All'
+                }, ]
             },
             tooltip: {
                 trigger: 'axis',
@@ -268,6 +274,9 @@ var habitcharts = {
     showCategoryChart: () => {
         var myChart = echarts.init(document.getElementById('category-chart'));
         var option = {
+                title: {
+                    text: 'Categorys '
+                },
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -279,40 +288,70 @@ var habitcharts = {
             series: [{
                 name: 'Categorys ',
                 type: 'pie',
-                selectedMode: true,
-                radius: [30, 110],
-                center: ['25%', '50%'],
+                selectedMode: 'single',
+                radius: ['30%', '70%'],
+                center: ['50%', '45%'],
+                label: {
+                    position: 'outer',
+                    alignTo: 'none',
+                    bleedMargin: 5
+                },
+                labelLine:{
+                    length: 1,
+                },
                 roseType: 'area',
                 id: 'pie1',
                 data: []
-            }, {
-                name: 'habits',
+            }]
+        };
+        myChart.setOption(option);
+        var hChart = echarts.init(document.getElementById('habit-chart'));
+        var hOption = {
+                title: {
+                    text: 'Categorys '
+                },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            series: [{
+                name: 'Categorys ',
                 type: 'pie',
-                radius: [30, 110],
-                center: ['75%', '50%'],
-                id: 'pie2',
+                selectedMode: 'single',
+                label: {
+                    show: false,
+                    position: 'inside',
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                    }
+                },
+                radius: ['50%', '90%'],
+                roseType: 'area',
+                id: 'pie1',
                 data: []
             }]
         }; // 使用刚指定的配置项和数据显示图表。 
-        myChart.setOption(option);
-        habitcharts.getCategoryData(myChart)
+        hChart.setOption(hOption);
+        habitcharts.getCategoryData(myChart, hChart)
     },
-    getCategoryData: (chart) => {
+    getCategoryData: (cChart, hChart) => {
         $.get('get_category_data', (data) => {
-            chart.setOption({
+            cChart.setOption({
                 series: {
                     id: 'pie1',
                     data: data
                 }
             })
-            chart.on('click', {
+            cChart.on('click', {
                 seriesId: 'pie1'
             }, (params) => {
                 cate = data.filter(category => category.name === params.name)
                 if (cate) {
-                    chart.setOption({
+                    hChart.setOption({
                         series: {
-                            id: 'pie2',
+                            id: 'pie1',
                             data: cate[0].habits
                         }
                     })

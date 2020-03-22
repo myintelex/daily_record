@@ -13,6 +13,7 @@ def fake_data():
     db.create_all()
     Habit.query.delete()
     Record.query.delete()
+    Category.query.delete()
     db.session.commit()
 
     count = 24
