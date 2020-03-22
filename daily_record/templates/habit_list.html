@@ -11,9 +11,8 @@
     </h3>
 </div>
 {% for category in categorys%}
-{% if category.habits | length > 0 %}
 <div class="card mb-3 border-0 rounded-large bg-gray">
-    <div class="pl-4 pt-2 pr-4">
+    <div class="pl-3 pt-2 pr-3 pb-0">
         <div class="d-flex justify-content-between">
             <h5>{{category.name}}</h5>
             <div class="pr-1">
@@ -22,11 +21,10 @@
             </div>
         </div>
     </div>
-    <div class="card-body pt-0">
+    <div class="card-body pt-2 pb-0 pl-2 pr-2">
         {% for habit in category.habits %}
         {% include 'habit_item.html' %}
         {% endfor %}
     </div>
 </div>
-{% endif %}
 {% endfor %}
