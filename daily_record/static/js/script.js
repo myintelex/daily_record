@@ -5,6 +5,8 @@ $(document).ready(function () {
 
     DailyRecordApp.refreshScore()
     DailyRecordApp.showHabitList()
+    DailyRecordApp.showHabitLinks()
+    DailyRecordApp.showCalendarChart()
     // DailyRecordApp.showHabitCharts()
     $(document).on('click', '#btn-habit-list', function () {
         DailyRecordApp.showHabitList()
@@ -48,7 +50,7 @@ var DailyRecordApp = {
             url: '/get_prev_month_score',
             type: 'GET',
             success: function (data) {
-                    $('#prev-month-score').html(data)
+                $('#prev-month-score').html(data)
             },
         });
     },
@@ -95,6 +97,71 @@ var DailyRecordApp = {
             document.title = '(' + data.done + '/' + data.total + ') ' + document.title;
 
         })
+
+    },
+    showCalendarChart: () => {
+        function getVirtulData(year) {
+            year = year || '2017';
+            var date = +echarts.number.parseDate(year + '-01-01');
+            var end = +echarts.number.parseDate((+year + 1) + '-01-01');
+            var dayTime = 3600 * 24 * 1000;
+            var data = [];
+            for (var time = date; time < end; time += dayTime) {
+                data.push([
+                    echarts.format.formatTime('yyyy-MM-dd', time),
+                    Math.floor(Math.random() * 10000)
+                ]);
+            }
+            return data;
+        }
+        var myChart = echarts.init(document.getElementById('calendar-chart'));
+
+        var option = {
+            tooltip: {},
+            visualMap: {
+                min: 0,
+                max: 10000,
+                type: 'piecewise',
+                orient: 'horizontal',
+                left: 'center',
+                top: 0,
+                textStyle: {
+                    color: '#000'
+                }
+            },
+            calendar: {
+                top: 50,
+                left: 30,
+                right: 30,
+                cellSize: ['auto', 13],
+                range: '2016',
+                itemStyle: {
+                    borderWidth: 0.5
+                },
+                yearLabel: {
+                    show: false
+                }
+            },
+            series: {
+                type: 'heatmap',
+                coordinateSystem: 'calendar',
+                data: getVirtulData(2016)
+            }
+        };
+        myChart.setOption(option);
+    },
+    showHabitLinks: () => {
+        $.get('/get_categorys_name', data => {
+            console.log(data)
+            data.forEach(element => {
+                console.log(element)
+                $('#CategoryLinks').append(' <li class="nav-item">' +
+                    ' <a class="nav-link" href="#">' + element + '</a> </li>')
+            });
+
+
+        })
+
 
     }
 

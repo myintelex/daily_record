@@ -9,11 +9,15 @@
         </button>
 
     </h3>
+    <div class="custom-control custom-switch  custom-control-inline ">
+        <input type="checkbox" class="custom-control-input  form-control-lg" id="simplyDisplaySwitch">
+        <label class="custom-control-label" for="simplyDisplaySwitch"></label>
+    </div>
 </div>
 {% for category in categorys%}
 {% if category.habits | length > 0%}
 <div class="card mb-3 border-0 rounded-large bg-gray">
-    <div class="pl-3 pt-2 pr-3 pb-0">
+    <div class="category-name pl-3 pt-2 pr-3 pb-0">
         <div class="d-flex justify-content-between">
             <h5>{{category.name}}</h5>
             <div class="pr-1">

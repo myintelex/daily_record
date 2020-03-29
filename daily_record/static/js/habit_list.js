@@ -5,7 +5,7 @@ var habitList = {
     showEditHabitForm: function (id) {
         DailyRecordApp.showMyFormModal('/edit_habit/' + id, 'Edit Habit')
     },
-    delHabit: function(id){
+    delHabit: function (id) {
         DailyRecordApp.showMyFormModal('/del_habit/' + id, 'Edit Habit')
     },
 
@@ -79,5 +79,21 @@ $(document).ready(function () {
         id = $(this).attr('habit-id')
         date = $(this).attr('date')
         habitList.changeHabitState(id, date)
+    })
+    $(document).on('click', '#simplyDisplaySwitch', function () {
+        console.log('sd')
+        if ($(this).prop("checked")) {
+            $('.category-name').css('display', 'none');
+            $('.habit-small').css('display', 'none');
+            $('.habit-thisweek').css('display', 'none');
+            $('.habit-progress').css('display', 'none');
+        }else {
+            $('.category-name').css('display', 'block');
+            $('.habit-small').css('display', 'block');
+            $('.habit-thisweek').css('display', 'block');
+            $('.habit-progress').css('display', 'flex');
+
+        }
+
     })
 })
